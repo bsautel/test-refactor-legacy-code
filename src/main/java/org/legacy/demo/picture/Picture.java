@@ -8,6 +8,6 @@ public class Picture {
 	}
 
 	public void disableSharing() {
-		shared = true;
+		shared = false;
 	}
 }
