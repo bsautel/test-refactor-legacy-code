@@ -11,11 +11,11 @@ public class PictureService {
 	public List<Picture> getPicturesByUser(User user)
 			throws UserNotLoggedInException {
 		List<Picture> picturesList = new ArrayList<Picture>();
-		User loggedUser = UserSession.getLoggedInUser();
+		User loggedInUser = UserSession.getLoggedInUser();
 		boolean isFriend = false;
-		if (loggedUser != null) {
+		if (loggedInUser != null) {
 			for (User friend : user.getFriends()) {
-				if (friend.equals(loggedUser)) {
+				if (friend.equals(loggedInUser)) {
 					isFriend = true;
 					break;
 				}
