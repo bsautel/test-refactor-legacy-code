@@ -8,7 +8,7 @@ import org.legacy.demo.session.UserSession;
 import org.legacy.demo.user.User;
 
 public class PictureService {
-	public List<Picture> getGamesByUser(User user)
+	public List<Picture> getPicturesByUser(User user)
 			throws UserNotLoggedInException {
 		List<Picture> picturesList = new ArrayList<Picture>();
 		User loggedUser = UserSession.getLoggedInUser();
