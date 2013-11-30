@@ -11,7 +11,7 @@ public class PictureService {
 	public List<Picture> getGamesByUser(User user)
 			throws UserNotLoggedInException {
 		List<Picture> picturesList = new ArrayList<Picture>();
-		User loggedUser = UserSession.getInstance().getLoggedInUser();
+		User loggedUser = UserSession.getLoggedInUser();
 		boolean isFriend = false;
 		if (loggedUser != null) {
 			for (User friend : user.getFriends()) {
@@ -21,8 +21,13 @@ public class PictureService {
 				}
 			}
 			if (isFriend) {
-				picturesList = PictureDao.getInstance()
+				List<Picture> userPicturesList = PictureDao.getInstance()
 						.findPicturesByUser(user);
+				for (Picture picture : userPicturesList) {
+					if (picture.canBeShared()) {
+						picturesList.add(picture);
+					}
+				}
 			}
 			return picturesList;
 		} else {

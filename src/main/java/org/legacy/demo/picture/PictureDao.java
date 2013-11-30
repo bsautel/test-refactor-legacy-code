@@ -2,7 +2,7 @@ package org.legacy.demo.picture;
 
 import java.util.List;
 
-import org.legacy.demo.exception.DependsOnLegacyCodeException;
+import org.legacy.demo.exception.DependsOnCodeThatRequiresContextException;
 import org.legacy.demo.user.User;
 
 public class PictureDao {
@@ -11,6 +11,6 @@ public class PictureDao {
 	}
 
 	public List<Picture> findPicturesByUser(User user) {
-		throw new DependsOnLegacyCodeException();
+		throw new DependsOnCodeThatRequiresContextException();
 	}
 }
