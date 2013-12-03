@@ -5,6 +5,8 @@ import static java.util.Collections.emptyList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.junit.Assert.assertTrue;
+import static org.legacy.demo.picture.PictureBuilder.privatePicture;
+import static org.legacy.demo.picture.PictureBuilder.sharedPicture;
 
 import java.util.List;
 
@@ -62,10 +64,9 @@ public class PictureServiceTest {
 			throws UserNotLoggedInException {
 		loggedInUser = new User("Alice");
 		bob.addFriend(loggedInUser);
-		Picture tourEiffel = new Picture();
-		Picture vieuxPort = new Picture();
-		vieuxPort.disableSharing();
-		Picture montBlanc = new Picture();
+		Picture tourEiffel = sharedPicture();
+		Picture vieuxPort = privatePicture();
+		Picture montBlanc = sharedPicture();
 		userPictures = asList(tourEiffel, vieuxPort, montBlanc);
 
 		List<Picture> pictures = pictureService.getPicturesByUser(bob);
