@@ -21,8 +21,7 @@ public class PictureService {
 				}
 			}
 			if (isFriend) {
-				List<Picture> userPicturesList = PictureDao.getInstance()
-						.findPicturesByUser(user);
+				List<Picture> userPicturesList = getUserPictures(user);
 				for (Picture picture : userPicturesList) {
 					if (picture.canBeShared()) {
 						picturesList.add(picture);
@@ -33,6 +32,10 @@ public class PictureService {
 		} else {
 			throw new UserNotLoggedInException();
 		}
+	}
+
+	protected List<Picture> getUserPictures(User user) {
+		return PictureDao.getInstance().findPicturesByUser(user);
 	}
 
 	protected User getLoggedInUser() {
