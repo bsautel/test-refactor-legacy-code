@@ -21,14 +21,7 @@ public class PictureService {
 	public List<Picture> getPicturesByUser(User user, User loggedInUser)
 			throws UserNotLoggedInException {
 		if (loggedInUser != null) {
-			boolean isFriend = false;
-			for (User friend : user.getFriends()) {
-				if (friend.equals(loggedInUser)) {
-					isFriend = true;
-					break;
-				}
-			}
-			if (isFriend) {
+			if (user.isFriendWith(loggedInUser)) {
 				List<Picture> userPicturesList = pictureDao
 						.findPicturesByUser(user);
 				return filterSharedPicture(userPicturesList);

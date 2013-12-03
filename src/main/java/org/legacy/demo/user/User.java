@@ -22,4 +22,13 @@ public class User {
 	public void addFriend(User friend) {
 		friends.add(friend);
 	}
+
+	public boolean isFriendWith(User user) {
+		for (User friend : friends) {
+			if (friend.equals(user)) {
+				return true;
+			}
+		}
+		return false;
+	}
 }
