@@ -50,6 +50,7 @@ public class PictureServiceTest {
 	public void shoudReturnNoPictureWithTwoUsersThatAreNotFriend()
 			throws UserNotLoggedInException {
 		loggedInUser = new User("Alice");
+		bob.addFriend(new User("John"));
 
 		List<Picture> pictures = pictureService.getPicturesByUser(bob);
 
