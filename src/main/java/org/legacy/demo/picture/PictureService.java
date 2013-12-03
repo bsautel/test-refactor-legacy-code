@@ -4,14 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.legacy.demo.exception.UserNotLoggedInException;
-import org.legacy.demo.session.UserSession;
 import org.legacy.demo.user.User;
 
 public class PictureService {
-	public List<Picture> getPicturesByUser(User user)
+	public List<Picture> getPicturesByUser(User user, User loggedInUser)
 			throws UserNotLoggedInException {
 		List<Picture> picturesList = new ArrayList<Picture>();
-		User loggedInUser = getLoggedInUser();
 		boolean isFriend = false;
 		if (loggedInUser != null) {
 			for (User friend : user.getFriends()) {
@@ -36,9 +34,5 @@ public class PictureService {
 
 	protected List<Picture> getUserPictures(User user) {
 		return PictureDao.getInstance().findPicturesByUser(user);
-	}
-
-	protected User getLoggedInUser() {
-		return UserSession.getLoggedInUser();
 	}
 }

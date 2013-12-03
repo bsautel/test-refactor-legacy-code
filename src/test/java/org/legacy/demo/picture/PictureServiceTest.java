@@ -17,16 +17,11 @@ import org.legacy.demo.user.User;
 
 public class PictureServiceTest {
 	private PictureService pictureService;
-	private User bob;
+	private User user;
 	private User loggedInUser;
 	private List<Picture> userPictures;
 
 	private class MyPictureService extends PictureService {
-		@Override
-		protected User getLoggedInUser() {
-			return loggedInUser;
-		}
-
 		@Override
 		protected List<Picture> getUserPictures(User user) {
 			return userPictures;
@@ -36,7 +31,8 @@ public class PictureServiceTest {
 	@Before
 	public void setUp() {
 		pictureService = new MyPictureService();
-		bob = new User("Bob");
+		user = new User("Bob");
+		loggedInUser = new User("Alice");
 		userPictures = emptyList();
 	}
 
@@ -45,16 +41,16 @@ public class PictureServiceTest {
 			throws UserNotLoggedInException {
 		loggedInUser = null;
 
-		pictureService.getPicturesByUser(bob);
+		pictureService.getPicturesByUser(user, null);
 	}
 
 	@Test
 	public void shoudReturnNoPictureWithTwoUsersThatAreNotFriend()
 			throws UserNotLoggedInException {
-		loggedInUser = new User("Alice");
-		bob.addFriend(new User("John"));
+		user.addFriend(new User("John"));
 
-		List<Picture> pictures = pictureService.getPicturesByUser(bob);
+		List<Picture> pictures = pictureService.getPicturesByUser(user,
+				loggedInUser);
 
 		assertTrue(pictures.isEmpty());
 	}
@@ -62,14 +58,14 @@ public class PictureServiceTest {
 	@Test
 	public void shouldReturnSharedPicturesWithUsersThatAreFriend()
 			throws UserNotLoggedInException {
-		loggedInUser = new User("Alice");
-		bob.addFriend(loggedInUser);
+		user.addFriend(loggedInUser);
 		Picture tourEiffel = sharedPicture();
 		Picture vieuxPort = privatePicture();
 		Picture montBlanc = sharedPicture();
 		userPictures = asList(tourEiffel, vieuxPort, montBlanc);
 
-		List<Picture> pictures = pictureService.getPicturesByUser(bob);
+		List<Picture> pictures = pictureService.getPicturesByUser(user,
+				loggedInUser);
 
 		assertThat(pictures, contains(tourEiffel, montBlanc));
 	}
