@@ -20,14 +20,20 @@ public class PictureService {
 
 	public List<Picture> getPicturesByUser(User user, User loggedInUser)
 			throws UserNotLoggedInException {
-		if (loggedInUser != null) {
-			if (user.isFriendWith(loggedInUser)) {
-				List<Picture> userPicturesList = pictureDao
-						.findPicturesByUser(user);
-				return filterSharedPicture(userPicturesList);
-			}
-			return new ArrayList<>();
-		} else {
+		ensureUserIsLoggedIn(loggedInUser);
+
+		return user.isFriendWith(loggedInUser) ? getUserSharedPictures(user)
+				: new ArrayList<Picture>();
+	}
+
+	private List<Picture> getUserSharedPictures(User user) {
+		List<Picture> userPicturesList = pictureDao.findPicturesByUser(user);
+		return filterSharedPicture(userPicturesList);
+	}
+
+	private void ensureUserIsLoggedIn(User loggedInUser)
+			throws UserNotLoggedInException {
+		if (loggedInUser == null) {
 			throw new UserNotLoggedInException();
 		}
 	}
