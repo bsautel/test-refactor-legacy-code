@@ -1,39 +1,37 @@
 package org.legacy.demo.picture;
 
 import static java.util.Arrays.asList;
-import static java.util.Collections.emptyList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.junit.Assert.assertTrue;
 import static org.legacy.demo.picture.PictureBuilder.privatePicture;
 import static org.legacy.demo.picture.PictureBuilder.sharedPicture;
+import static org.mockito.Mockito.when;
 
 import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.legacy.demo.exception.UserNotLoggedInException;
 import org.legacy.demo.user.User;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 
+@RunWith(MockitoJUnitRunner.class)
 public class PictureServiceTest {
+	@Mock
+	private PictureDao pictureDao;
+	@InjectMocks
 	private PictureService pictureService;
 	private User user;
 	private User loggedInUser;
-	private List<Picture> userPictures;
-
-	private class MyPictureService extends PictureService {
-		@Override
-		protected List<Picture> getUserPictures(User user) {
-			return userPictures;
-		}
-	}
 
 	@Before
 	public void setUp() {
-		pictureService = new MyPictureService();
 		user = new User("Bob");
 		loggedInUser = new User("Alice");
-		userPictures = emptyList();
 	}
 
 	@Test(expected = UserNotLoggedInException.class)
@@ -62,7 +60,8 @@ public class PictureServiceTest {
 		Picture tourEiffel = sharedPicture();
 		Picture vieuxPort = privatePicture();
 		Picture montBlanc = sharedPicture();
-		userPictures = asList(tourEiffel, vieuxPort, montBlanc);
+		when(pictureDao.findPicturesByUser(user)).thenReturn(
+				asList(tourEiffel, vieuxPort, montBlanc));
 
 		List<Picture> pictures = pictureService.getPicturesByUser(user,
 				loggedInUser);

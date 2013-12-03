@@ -7,6 +7,12 @@ import org.legacy.demo.exception.UserNotLoggedInException;
 import org.legacy.demo.user.User;
 
 public class PictureService {
+	private final PictureDao pictureDao;
+
+	public PictureService(PictureDao pictureDao) {
+		this.pictureDao = pictureDao;
+	}
+
 	public List<Picture> getPicturesByUser(User user, User loggedInUser)
 			throws UserNotLoggedInException {
 		List<Picture> picturesList = new ArrayList<Picture>();
@@ -19,7 +25,7 @@ public class PictureService {
 				}
 			}
 			if (isFriend) {
-				List<Picture> userPicturesList = getUserPictures(user);
+				List<Picture> userPicturesList = pictureDao.findPicturesByUser(user);
 				for (Picture picture : userPicturesList) {
 					if (picture.canBeShared()) {
 						picturesList.add(picture);
@@ -30,9 +36,5 @@ public class PictureService {
 		} else {
 			throw new UserNotLoggedInException();
 		}
-	}
-
-	protected List<Picture> getUserPictures(User user) {
-		return PictureDao.getInstance().findPicturesByUser(user);
 	}
 }
